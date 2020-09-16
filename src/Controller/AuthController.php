@@ -60,24 +60,19 @@ class AuthController extends ApiController
      */
     public function getTokenUser(Request $request, JWTTokenManagerInterface $JWTManager, UserPasswordEncoderInterface $encoder, UserRepository $userRepository)
     {
-        $status = 200;
         $user = $userRepository->findOneBy([
             'username' => $request->get('username'),
         ]);
+
         if (!$user) {
-            $response = [
-                'message' => 'User not found!'
-            ];
-            $status = Response::HTTP_UNAUTHORIZED;
-        } else if ($user && $encoder->isPasswordValid($user, $request->get('password'))) {
-            $response = ['token' => $JWTManager->create($user)];
+            $response = $this->respondUnauthorized('User not found!');
+        } else if ($user && !$encoder->isPasswordValid($user, $request->get('password'))) {
+            $response = $this->respondUnauthorized( 'Invalid Password!');
         } else {
-            $response = [
-                'message' => 'Invalid Password!'
-            ];
-            $status = Response::HTTP_UNAUTHORIZED;
+            $response = new JsonResponse(['token' => $JWTManager->create($user)], $this->statusCode);
         }
-        return new JsonResponse($response, $status);
+
+        return $response;
     }
 
 }
