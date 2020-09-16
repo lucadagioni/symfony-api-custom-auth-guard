@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 class ProductController extends AbstractController
 {
     /**
-     * @Route("/product", name="create_product")
+     * @Route("/api/product", name="create_product")
      */
     public function createProduct(): Response
     {
@@ -34,7 +34,7 @@ class ProductController extends AbstractController
     }
 
     /**
-     * @Route("/product/{id}", name="product_show")
+     * @Route("/api/product/{id}", name="product_show")
      * @param $id
      * @param ProductRepository $productRepository
      * @return Response

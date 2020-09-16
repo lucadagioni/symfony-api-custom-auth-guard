@@ -90,6 +90,24 @@
     "laminas/laminas-zendframework-bridge": {
         "version": "1.1.1"
     },
+    "lcobucci/jwt": {
+        "version": "3.3.3"
+    },
+    "lexik/jwt-authentication-bundle": {
+        "version": "2.5",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "2.5",
+            "ref": "5b2157bcd5778166a5696e42f552ad36529a07a6"
+        },
+        "files": [
+            "./config/packages/lexik_jwt_authentication.yaml"
+        ]
+    },
+    "namshi/jose": {
+        "version": "7.2.3"
+    },
     "nikic/php-parser": {
         "version": "v4.9.1"
     },
@@ -223,6 +241,15 @@
     "symfony/polyfill-php80": {
         "version": "v1.18.1"
     },
+    "symfony/profiler-pack": {
+        "version": "v1.0.5"
+    },
+    "symfony/property-access": {
+        "version": "v5.1.5"
+    },
+    "symfony/property-info": {
+        "version": "v5.1.5"
+    },
     "symfony/routing": {
         "version": "5.1",
         "recipe": {
@@ -237,6 +264,30 @@
             "./config/routes.yaml"
         ]
     },
+    "symfony/security-bundle": {
+        "version": "5.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "5.1",
+            "ref": "0a4bae19389d3b9cba1ca0102e3b2bccea724603"
+        },
+        "files": [
+            "./config/packages/security.yaml"
+        ]
+    },
+    "symfony/security-core": {
+        "version": "v5.1.5"
+    },
+    "symfony/security-csrf": {
+        "version": "v5.1.5"
+    },
+    "symfony/security-guard": {
+        "version": "v5.1.5"
+    },
+    "symfony/security-http": {
+        "version": "v5.1.5"
+    },
     "symfony/service-contracts": {
         "version": "v2.2.0"
     },
@@ -246,14 +297,51 @@
     "symfony/string": {
         "version": "v5.1.5"
     },
+    "symfony/translation-contracts": {
+        "version": "v2.2.0"
+    },
+    "symfony/twig-bridge": {
+        "version": "v5.1.5"
+    },
+    "symfony/twig-bundle": {
+        "version": "5.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "5.0",
+            "ref": "fab9149bbaa4d5eca054ed93f9e1b66cc500895d"
+        },
+        "files": [
+            "./config/packages/test/twig.yaml",
+            "./config/packages/twig.yaml",
+            "./templates/base.html.twig"
+        ]
+    },
     "symfony/var-dumper": {
         "version": "v5.1.5"
     },
     "symfony/var-exporter": {
         "version": "v5.1.5"
     },
+    "symfony/web-profiler-bundle": {
+        "version": "3.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.3",
+            "ref": "6bdfa1a95f6b2e677ab985cd1af2eae35d62e0f6"
+        },
+        "files": [
+            "./config/packages/dev/web_profiler.yaml",
+            "./config/packages/test/web_profiler.yaml",
+            "./config/routes/dev/web_profiler.yaml"
+        ]
+    },
     "symfony/yaml": {
         "version": "v5.1.5"
+    },
+    "twig/twig": {
+        "version": "v3.0.5"
     },
     "webimpress/safe-writer": {
         "version": "2.1.0"
