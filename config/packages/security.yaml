@@ -1,7 +1,9 @@
 security:
     encoders:
         App\Entity\User:
-            algorithm: bcrypt
+            algorithm: auto
+#            algorithm: sha512
+#            algorithm: bcrypt
 
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
@@ -26,7 +28,8 @@ security:
             provider: app_user_provider
             guard:
                 authenticators:
-                    - lexik_jwt_authentication.jwt_token_authenticator
+                    - 'jwt_token_authenticator'
+                entry_point: App\Security\TokenAuthenticator
 
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/

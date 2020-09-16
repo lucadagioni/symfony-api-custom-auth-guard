@@ -10,6 +10,7 @@ namespace App\Controller;
 
 
 use App\Entity\User;
+use App\Repository\UserRepository;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -17,11 +18,17 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class AuthController extends ApiController
 {
-
+    /**
+     * @Route("/register", name="register", methods="POST")
+     * @param Request $request
+     * @param UserPasswordEncoderInterface $encoder
+     * @return JsonResponse
+     */
     public function register(Request $request, UserPasswordEncoderInterface $encoder)
     {
         $em = $this->getDoctrine()->getManager();
@@ -45,14 +52,32 @@ class AuthController extends ApiController
     }
 
     /**
+     * @Route("/api/login_check", name="api_login_check", methods="POST")
      * @param Request $request
      * @param JWTTokenManagerInterface $JWTManager
+     * @param UserPasswordEncoderInterface $encoder
      * @return JsonResponse
      */
-    public function getTokenUser(Request $request, JWTTokenManagerInterface $JWTManager)
+    public function getTokenUser(Request $request, JWTTokenManagerInterface $JWTManager, UserPasswordEncoderInterface $encoder, UserRepository $userRepository)
     {
-        $user = new User($request->get('username'));
-        return new JsonResponse(['token' => $JWTManager->create($user)]);
+        $status = 200;
+        $user = $userRepository->findOneBy([
+            'username' => $request->get('username'),
+        ]);
+        if (!$user) {
+            $response = [
+                'message' => 'User not found!'
+            ];
+            $status = Response::HTTP_UNAUTHORIZED;
+        } else if ($user && $encoder->isPasswordValid($user, $request->get('password'))) {
+            $response = ['token' => $JWTManager->create($user)];
+        } else {
+            $response = [
+                'message' => 'Invalid Password!'
+            ];
+            $status = Response::HTTP_UNAUTHORIZED;
+        }
+        return new JsonResponse($response, $status);
     }
 
 }
