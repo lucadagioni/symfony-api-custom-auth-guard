@@ -4,25 +4,31 @@ namespace App\Controller;
 
 use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;use App\Entity\Product;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\Product;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
-class ProductController extends AbstractController
+class ProductController extends ApiController
 {
     /**
      * @Route("/api/product", name="create_product", methods="POST")
+     * @param Request $request
+     * @return Response
      */
-    public function createProduct(): Response
+    public function createProduct(Request $request): Response
     {
+        $params = $request->request;
         // you can fetch the EntityManager via $this->getDoctrine()
         // or you can add an argument to the action: createProduct(EntityManagerInterface $entityManager)
         $entityManager = $this->getDoctrine()->getManager();
 
         $product = new Product();
-        $product->setName('Keyboard');
-        $product->setPrice(1999);
-        $product->setDescription('Ergonomic and stylish!');
+        $product->setName($params->get('name'));
+        $product->setPrice($params->get('price'));
+        $product->setDescription($params->get('description'));
 
         // tell Doctrine you want to (eventually) save the Product (no queries yet)
         $entityManager->persist($product);
@@ -30,7 +36,7 @@ class ProductController extends AbstractController
         // actually executes the queries (i.e. the INSERT query)
         $entityManager->flush();
 
-        return new Response('Saved new product with id '.$product->getId());
+        return new JsonResponse(['data' => 'Saved new product with id ' . $product->getId()], $this->statusCode);
     }
 
     /**
@@ -45,14 +51,10 @@ class ProductController extends AbstractController
 
         if (!$product) {
             throw $this->createNotFoundException(
-                'No product found for id '.$id
+                'No product found for id ' . $id
             );
         }
 
-        return new Response('Check out this great product: '.$product->getName());
-
-        // or render a template
-        // in the template, print things with {{ product.name }}
-        // return $this->render('product/show.html.twig', ['product' => $product]);
+        return new JsonResponse(['data' => 'Check out this great product: ' . $product->getName() . ' - ' . $product->getDescription()], $this->statusCode);
     }
 }

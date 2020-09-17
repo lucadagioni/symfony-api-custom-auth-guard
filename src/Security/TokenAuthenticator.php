@@ -19,8 +19,8 @@ use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 
 class TokenAuthenticator extends AbstractGuardAuthenticator
 {
-    private $jwtEncoder;
-    private $em;
+    private JWTEncoderInterface $jwtEncoder;
+    private EntityManagerInterface $em;
 
     public function __construct(JWTEncoderInterface $jwtEncoder, EntityManagerInterface $em)
     {
